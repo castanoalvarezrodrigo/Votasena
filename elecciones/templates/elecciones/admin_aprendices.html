@@ -1,0 +1,80 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card section-card admin-panel">
+    <div class="admin-header">
+        <div>
+            <h1>Gestión de aprendices</h1>
+            <p>Administra el registro de aprendices desde aquí.</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{% url 'admin_dashboard' %}" class="button small">Volver al panel</a>
+            <a href="{% url 'admin_aprendiz_create' %}" class="button small">Crear aprendiz</a>
+        </div>
+    </div>
+
+    <div class="admin-filters">
+        <form method="get" class="filters-form">
+            <div class="filters-grid">
+                <div class="form-group">
+                    <label for="username">Usuario</label>
+                    <input type="text" id="username" name="username" value="{{ username_filter }}" placeholder="Buscar por usuario">
+                </div>
+                <div class="form-group">
+                    <label for="email">Correo</label>
+                    <input type="text" id="email" name="email" value="{{ email_filter }}" placeholder="Buscar por correo">
+                </div>
+                <div class="form-group">
+                    <label for="ficha">Ficha</label>
+                    <input type="text" id="ficha" name="ficha" value="{{ ficha_filter }}" placeholder="Buscar por ficha">
+                </div>
+                <div class="form-group">
+                    <label for="sort">Ordenar por</label>
+                    <select id="sort" name="sort">
+                        <option value="username" {% if sort_option == 'username' %}selected{% endif %}>Usuario asc</option>
+                        <option value="username_desc" {% if sort_option == 'username_desc' %}selected{% endif %}>Usuario desc</option>
+                        <option value="email" {% if sort_option == 'email' %}selected{% endif %}>Correo asc</option>
+                        <option value="email_desc" {% if sort_option == 'email_desc' %}selected{% endif %}>Correo desc</option>
+                        <option value="ficha" {% if sort_option == 'ficha' %}selected{% endif %}>Ficha asc</option>
+                        <option value="ficha_desc" {% if sort_option == 'ficha_desc' %}selected{% endif %}>Ficha desc</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filters-actions">
+                <button type="submit" class="button small">Aplicar filtros</button>
+                <a href="{% url 'admin_aprendices' %}" class="button small button-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Usuario</th>
+                    <th>Correo</th>
+                    <th>Ficha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for profile in profiles %}
+                    <tr>
+                        <td>{{ profile.user.username }}</td>
+                        <td>{{ profile.user.email }}</td>
+                        <td>{{ profile.ficha }}</td>
+                        <td>
+                            <a href="{% url 'admin_aprendiz_edit' profile.id %}" class="button small">Editar</a>
+                            <a href="{% url 'admin_aprendiz_delete' profile.id %}" class="button small button-delete">Eliminar</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="3">No hay aprendices registrados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

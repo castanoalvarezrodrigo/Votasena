@@ -1,0 +1,28 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card section-card admin-panel">
+    <h1>{{ title }}</h1>
+    <form method="post" class="admin-form">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div class="form-group">
+            {{ form.voter.label_tag }}
+            {{ form.voter }}
+            {{ form.voter.errors }}
+        </div>
+
+        <div class="form-group">
+            {{ form.candidacy.label_tag }}
+            {{ form.candidacy }}
+            {{ form.candidacy.errors }}
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="button">Guardar</button>
+            <a href="{% url 'admin_votes' %}" class="button button-text">Cancelar</a>
+        </div>
+    </form>
+</section>
+{% endblock %}

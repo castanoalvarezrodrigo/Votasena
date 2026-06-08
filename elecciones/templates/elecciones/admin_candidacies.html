@@ -1,0 +1,81 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card section-card admin-panel">
+    <div class="admin-header">
+        <div>
+            <h1>Gestión de candidatos</h1>
+            <p>Administra candidatos y sus datos básicos.</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{% url 'admin_dashboard' %}" class="button small">Volver al panel</a>
+            <a href="{% url 'admin_candidacy_create' %}" class="button small">Crear candidato</a>
+        </div>
+    </div>
+
+    <div class="admin-filters">
+        <form method="get" class="filters-form">
+            <div class="filters-grid">
+                <div class="form-group">
+                    <label for="role">Rol</label>
+                    <select id="role" name="role">
+                        <option value="" {% if not role_filter %}selected{% endif %}>Todos los roles</option>
+                        {% for value, label in role_choices %}
+                            <option value="{{ value }}" {% if role_filter == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="ficha">Ficha</label>
+                    <input type="text" id="ficha" name="ficha" value="{{ ficha_filter }}" placeholder="Buscar por ficha">
+                </div>
+                <div class="form-group">
+                    <label for="sort">Ordenar por</label>
+                    <select id="sort" name="sort">
+                        <option value="role_name" {% if sort_option == 'role_name' %}selected{% endif %}>Rol / Nombre asc</option>
+                        <option value="role_name_desc" {% if sort_option == 'role_name_desc' %}selected{% endif %}>Rol / Nombre desc</option>
+                        <option value="ficha" {% if sort_option == 'ficha' %}selected{% endif %}>Ficha asc</option>
+                        <option value="ficha_desc" {% if sort_option == 'ficha_desc' %}selected{% endif %}>Ficha desc</option>
+                        <option value="name" {% if sort_option == 'name' %}selected{% endif %}>Nombre asc</option>
+                        <option value="name_desc" {% if sort_option == 'name_desc' %}selected{% endif %}>Nombre desc</option>
+                    </select>
+                </div>
+            </div>
+            <div class="filters-actions">
+                <button type="submit" class="button small">Aplicar filtros</button>
+                <a href="{% url 'admin_candidacies' %}" class="button small button-secondary">Limpiar</a>
+            </div>
+        </form>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Nombre</th>
+                    <th>Rol</th>
+                    <th>Ficha</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for candidacy in candidacies %}
+                    <tr>
+                        <td>{{ candidacy.name }}</td>
+                        <td>{{ candidacy.get_role_display }}</td>
+                        <td>{{ candidacy.ficha }}</td>
+                        <td>
+                            <a href="{% url 'admin_candidacy_edit' candidacy.id %}" class="button small">Editar</a>
+                            <a href="{% url 'admin_candidacy_delete' candidacy.id %}" class="button small button-delete">Eliminar</a>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay candidatos registrados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}

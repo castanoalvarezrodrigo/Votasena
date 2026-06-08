@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280" viewBox="0 0 400 280">
+  <rect width="400" height="280" rx="24" fill="#39A900" />
+  <circle cx="200" cy="110" r="64" fill="#ffffff" opacity="0.9" />
+  <rect x="120" y="190" width="160" height="50" rx="12" fill="#ffffff" opacity="0.9" />
+  <text x="200" y="205" fill="#0f2c13" text-anchor="middle" font-size="26" font-weight="700">Candidato</text>
+</svg>

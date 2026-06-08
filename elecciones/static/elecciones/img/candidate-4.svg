@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280" viewBox="0 0 400 280">
+  <rect width="400" height="280" rx="24" fill="#f8fafc" />
+  <circle cx="200" cy="110" r="64" fill="#39A900" />
+  <rect x="110" y="190" width="180" height="50" rx="12" fill="#007832" />
+  <text x="200" y="205" fill="#f8fafc" text-anchor="middle" font-size="24" font-weight="700">Juntos</text>
+</svg>

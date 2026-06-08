@@ -1,0 +1,108 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card policy-card">
+    <h1>Políticas de Protección de Datos</h1>
+    <div class="policy-content">
+        <h2>1. Objetivo de la Recolección de Datos</h2>
+        <p>
+            La presente plataforma de votación (Votasena) ha sido desarrollada por el SENA para facilitar procesos democráticos 
+            internos y permitir que nuestros aprendices ejerzan su derecho al voto de manera segura y transparente.
+        </p>
+
+        <h2>2. Información que Recopilamos</h2>
+        <p>Recopilamos la siguiente información personal:</p>
+        <ul>
+            <li>Nombre de usuario</li>
+            <li>Número de identificación</li>
+            <li>Número de ficha</li>
+            <li>Historial de votación (registro de votos realizados)</li>
+            <li>Datos de acceso a la plataforma</li>
+        </ul>
+
+        <h2>3. Base Legal para el Tratamiento de Datos</h2>
+        <p>
+            El tratamiento de datos personales se realiza con base en:
+        </p>
+        <ul>
+            <li>La Ley 1581 de 2012 (Ley de Protección de Datos Personales en Colombia)</li>
+            <li>El Decreto 1377 de 2013 (Reglamento de la Ley 1581 de 2012)</li>
+            <li>El consentimiento informado del titular de los datos</li>
+            <li>Las obligaciones contractuales como aprendiz del SENA</li>
+        </ul>
+
+        <h2>4. Almacenamiento y Seguridad de Datos</h2>
+        <p>
+            Los datos personales se almacenan en servidores seguros con acceso restringido. Implementamos medidas técnicas 
+            y administrativas para proteger la información contra acceso no autorizado, alteración, pérdida o destrucción.
+        </p>
+        <p>
+            La plataforma utiliza encriptación para proteger los datos en tránsito y bases de datos seguras para su 
+            almacenamiento.
+        </p>
+
+        <h2>5. Derechos de los Titulares</h2>
+        <p>Como titular de datos personales, usted tiene derecho a:</p>
+        <ul>
+            <li><strong>Acceso:</strong> Conocer qué datos hemos recopilado sobre usted</li>
+            <li><strong>Rectificación:</strong> Solicitar la corrección de datos inexactos o incompletos</li>
+            <li><strong>Eliminación:</strong> Solicitar la supresión de sus datos (bajo ciertas circunstancias)</li>
+            <li><strong>Oposición:</strong> Oponerse al procesamiento de sus datos para ciertos fines</li>
+            <li><strong>Portabilidad:</strong> Recibir sus datos en un formato estructurado</li>
+        </ul>
+
+        <h2>6. Compartir Información</h2>
+        <p>
+            La información personal NO será compartida con terceros sin su consentimiento, excepto cuando sea requerido por ley 
+            o cuando sea necesario para el funcionamiento de la plataforma.
+        </p>
+        <p>
+            Los resultados de las votaciones pueden ser publicados de manera agregada, sin revelar datos personales individuales.
+        </p>
+
+        <h2>7. Retención de Datos</h2>
+        <p>
+            Los datos personales se conservarán mientras sea necesario para los propósitos indicados en esta política. Una vez 
+            finalizado el proceso de votación, los datos se mantendrán por un período de 3 años para fines de auditoría y 
+            cumplimiento normativo.
+        </p>
+
+        <h2>8. Cookies y Tecnologías Similares</h2>
+        <p>
+            Esta plataforma puede utilizar cookies de sesión para mantener su acceso seguro. No utilizamos cookies de 
+            seguimiento o publicidad.
+        </p>
+
+        <h2>9. Cambios en Esta Política</h2>
+        <p>
+            El SENA se reserva el derecho de actualizar esta política en cualquier momento. Los cambios significativos serán 
+            comunicados a través de la plataforma.
+        </p>
+
+        <h2>10. Contacto</h2>
+        <p>
+            Si tiene preguntas o desea ejercer sus derechos respecto al tratamiento de sus datos personales, puede contactar a:
+        </p>
+        <p>
+            <strong>Oficina de Protección de Datos</strong><br>
+            Servicio Nacional de Aprendizaje - SENA<br>
+            Email: datospersonales@sena.edu.co
+        </p>
+
+        <h2>11. Declaración de Cumplimiento</h2>
+        <p>
+            El SENA declara su compromiso con la protección de los datos personales de conformidad con la legislación colombiana 
+            vigente y se compromete a implementar medidas técnicas y administrativas para garantizar la seguridad, integridad y 
+            confidencialidad de la información.
+        </p>
+
+        <div class="policy-date">
+            <p><strong>Última actualización:</strong> Junio 2026</p>
+        </div>
+    </div>
+
+    <div class="policy-actions">
+        <a href="{% url 'login' %}" class="button">Volver al inicio</a>
+    </div>
+</section>
+{% endblock %}

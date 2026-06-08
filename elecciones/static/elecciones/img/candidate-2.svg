@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="400" height="280" viewBox="0 0 400 280">
+  <rect width="400" height="280" rx="24" fill="#007832" />
+  <circle cx="200" cy="110" r="64" fill="#f8fafc" />
+  <rect x="110" y="190" width="180" height="50" rx="12" fill="#f8fafc" />
+  <text x="200" y="205" fill="#00304D" text-anchor="middle" font-size="26" font-weight="700">Votar</text>
+</svg>

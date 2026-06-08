@@ -1,0 +1,128 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card section-card admin-panel">
+    <div class="admin-header">
+        <div>
+            <h1>Panel administrativo</h1>
+            <p>Gestiona aprendices, candidatos y votos desde un solo lugar.</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{% url 'admin_aprendices' %}" class="button small">Aprendices</a>
+            <a href="{% url 'admin_candidacies' %}" class="button small">Candidatos</a>
+            <a href="{% url 'admin_votes' %}" class="button small">Votos</a>
+        </div>
+    </div>
+
+    <div class="admin-filters admin-dashboard-filters">
+        <form method="get" class="filters-form">
+            <div class="filters-grid">
+                <div class="form-group">
+                    <label for="ficha">Ficha</label>
+                    <input type="text" id="ficha" name="ficha" value="{{ ficha_filter }}" placeholder="Filtrar ganadores por ficha">
+                </div>
+            </div>
+            <div class="filters-actions">
+                <button type="submit" class="button small">Aplicar filtro</button>
+                <a href="{% url 'admin_dashboard' %}" class="button small button-secondary">Mostrar todo</a>
+            </div>
+        </form>
+    </div>
+
+    {% if ficha_filter %}
+        {% if winners_by_ficha %}
+            <div class="dashboard-grid">
+                {% for winner in winners_by_ficha %}
+                    <article class="winner-card">
+                        <h3>{{ winner.role }} - Ficha {{ winner.ficha }}</h3>
+                        <p class="winner-name">{{ winner.name }}</p>
+                        <span class="winner-count">{{ winner.votes }} votos</span>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="dashboard-grid">
+                <article class="winner-card">
+                    <h3>No hay resultados</h3>
+                    <p class="winner-name">No se encontraron ganadores para la ficha {{ ficha_filter }}.</p>
+                    <span class="winner-count">0 votos</span>
+                </article>
+            </div>
+        {% endif %}
+    {% else %}
+        <div class="dashboard-grid">
+            {% for winner in winners %}
+                <article class="winner-card">
+                    <h3>{{ winner.role }}</h3>
+                    <p class="winner-name">{{ winner.name }}</p>
+                    <span class="winner-count">{{ winner.votes }} votos</span>
+                </article>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <div class="charts-section">
+        {% for chart in role_charts %}
+            <div class="chart-card chart-split">
+                <h2>Votos - {{ chart.role }}</h2>
+                <canvas id="voteChart{{ forloop.counter }}" height="160"></canvas>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    const chartData = [
+        {% for chart in role_charts %}
+        {
+            id: 'voteChart{{ forloop.counter }}',
+            labels: {{ chart.labels|safe }},
+            values: {{ chart.values|safe }},
+            color: ['rgba(16, 185, 129, 0.75)', 'rgba(59, 130, 246, 0.75)', 'rgba(234, 88, 12, 0.75)'][{{ forloop.counter0 }}],
+            border: ['rgba(16, 185, 129, 1)', 'rgba(59, 130, 246, 1)', 'rgba(234, 88, 12, 1)'][{{ forloop.counter0 }}],
+        },
+        {% endfor %}
+    ];
+
+    chartData.forEach(function(chart) {
+        const ctx = document.getElementById(chart.id).getContext('2d');
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: chart.labels,
+                datasets: [{
+                    label: 'Votos',
+                    data: chart.values,
+                    backgroundColor: chart.color,
+                    borderColor: chart.border,
+                    borderWidth: 1,
+                    borderRadius: 12,
+                    barThickness: 32,
+                }]
+            },
+            options: {
+                responsive: true,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111827',
+                        titleColor: '#fff',
+                        bodyColor: '#e5e7eb'
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: { precision: 0 },
+                        grid: { color: 'rgba(148, 163, 184, 0.25)' }
+                    },
+                    x: {
+                        grid: { display: false }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

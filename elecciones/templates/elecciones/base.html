@@ -1,0 +1,43 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Votasena</title>
+    <link rel="stylesheet" href="{% static 'elecciones/css/styles.css' %}">
+</head>
+<body>
+    <header class="site-header">
+        <div class="header-brand">
+            <div class="brand">
+                <img src="{% static 'elecciones/img/logovotasena.png' %}" alt="Logo Votasena" class="brand-logo">
+            </div>
+        </div>
+        {% if request.user.is_authenticated %}
+            <nav class="top-nav">
+                <a href="{% url 'dashboard' %}">Inicio</a>
+                {% if request.user.is_superuser %}
+                    <a href="{% url 'admin_dashboard' %}">Panel administrativo</a>
+                {% endif %}
+                <a href="{% url 'logout' %}">Cerrar sesión</a>
+            </nav>
+        {% endif %}
+    </header>
+
+    <main class="page-container">
+        {% if messages %}
+            <div class="messages">
+                {% for message in messages %}
+                    <div class="message {{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            </div>
+        {% endif %}
+        {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+        <p>Aplicación de votación SENA - Votasena</p>
+    </footer>
+</body>
+</html>

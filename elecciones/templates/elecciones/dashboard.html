@@ -1,0 +1,246 @@
+{% extends 'elecciones/base.html' %}
+{% load static %}
+
+{% block content %}
+<section class="hero-card">
+    <div>
+        <h1>Hola, {{ request.user.username }}</h1>
+        <p>Ficha: <strong>{{ profile.ficha }}</strong></p>
+        <p>En esta página puedes votar solo una vez por representante y una vez por vocero/subvocero de tu ficha.</p>
+        {% if request.user.is_superuser %}
+            <a class="button" href="{% url 'admin_dashboard' %}">Ir a administración</a>
+        {% endif %}
+    </div>
+</section>
+
+<section class="card section-card representative-section">
+    <h2>Representantes</h2>
+    <div class="grid">
+        {% for cand in representantes %}
+            <article class="candidate-card">
+                <div class="candidate-card-header">
+                    <h3>{{ cand.name }}</h3>
+                    {% if cand.profile_image %}
+                        <img src="{{ cand.profile_image.url }}" alt="Foto de {{ cand.name }}" class="candidate-avatar">
+                    {% endif %}
+                </div>
+                <p>{{ cand.description }}</p>
+                {% if cand.role in voted_roles %}
+                    <span class="tag voted">Ya votaste</span>
+                {% else %}
+                    <div class="candidate-actions">
+                        {% if cand.proposals %}
+                            <div class="proposal-data" hidden>{{ cand.proposals }}</div>
+                            <button type="button" class="button small proposals-button" data-candidate-name="{{ cand.name }}" data-image-url="{% if cand.profile_image %}{{ cand.profile_image.url }}{% endif %}">Ver propuestas</button>
+                        {% endif %}
+                        <form method="post" action="{% url 'vote' %}" class="vote-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="candidate_id" value="{{ cand.id }}">
+                            <button type="button" class="button small vote-button" data-candidate-name="{{ cand.name }}">Votar</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </article>
+        {% empty %}
+            <p>No hay aspirantes a representante disponibles.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="card section-card">
+    <h2>Voceros de ficha {{ profile.ficha }}</h2>
+    <div class="grid">
+        {% for cand in voceros %}
+            <article class="candidate-card">
+                <div class="candidate-card-header">
+                    <h3>{{ cand.name }}</h3>
+                    {% if cand.profile_image %}
+                        <img src="{{ cand.profile_image.url }}" alt="Foto de {{ cand.name }}" class="candidate-avatar">
+                    {% endif %}
+                </div>
+                <p>{{ cand.description }}</p>
+                {% if cand.role in voted_roles %}
+                    <span class="tag voted">Ya votaste</span>
+                {% else %}
+                    <div class="candidate-actions">
+                        {% if cand.proposals %}
+                            <div class="proposal-data" hidden>{{ cand.proposals }}</div>
+                            <button type="button" class="button small proposals-button" data-candidate-name="{{ cand.name }}" data-image-url="{% if cand.profile_image %}{{ cand.profile_image.url }}{% endif %}">Ver propuestas</button>
+                        {% endif %}
+                        <form method="post" action="{% url 'vote' %}" class="vote-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="candidate_id" value="{{ cand.id }}">
+                            <button type="button" class="button small vote-button" data-candidate-name="{{ cand.name }}">Votar</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </article>
+        {% empty %}
+            <p>No hay aspirantes a vocero para tu ficha.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<section class="card section-card">
+    <h2>Subvoceros de ficha {{ profile.ficha }}</h2>
+    <div class="grid">
+        {% for cand in subvoceros %}
+            <article class="candidate-card">
+                <div class="candidate-card-header">
+                    <h3>{{ cand.name }}</h3>
+                    {% if cand.profile_image %}
+                        <img src="{{ cand.profile_image.url }}" alt="Foto de {{ cand.name }}" class="candidate-avatar">
+                    {% endif %}
+                </div>
+                <p>{{ cand.description }}</p>
+                {% if cand.role in voted_roles %}
+                    <span class="tag voted">Ya votaste</span>
+                {% else %}
+                    <div class="candidate-actions">
+                        {% if cand.proposals %}
+                            <div class="proposal-data" hidden>{{ cand.proposals }}</div>
+                            <button type="button" class="button small proposals-button" data-candidate-name="{{ cand.name }}" data-image-url="{% if cand.profile_image %}{{ cand.profile_image.url }}{% endif %}">Ver propuestas</button>
+                        {% endif %}
+                        <form method="post" action="{% url 'vote' %}" class="vote-form">
+                            {% csrf_token %}
+                            <input type="hidden" name="candidate_id" value="{{ cand.id }}">
+                            <button type="button" class="button small vote-button" data-candidate-name="{{ cand.name }}">Votar</button>
+                        </form>
+                    </div>
+                {% endif %}
+            </article>
+        {% empty %}
+            <p>No hay aspirantes a subvocero para tu ficha.</p>
+        {% endfor %}
+    </div>
+</section>
+
+<div class="modal-overlay" id="confirmModal" aria-hidden="true">
+    <div class="modal-card">
+        <h2>Confirmar voto</h2>
+        <p id="modalMessage">¿Estás seguro de realizar tu voto?</p>
+        <div class="modal-actions">
+            <button type="button" class="button small" id="cancelVote">Cancelar</button>
+            <button type="button" class="button small primary" id="confirmVote">Sí, votar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="proposalsModal" aria-hidden="true">
+    <div class="modal-card">
+        <h2 id="proposalsTitle">Propuestas</h2>
+        <div id="proposalsContent" class="proposals-list"></div>
+        <div class="modal-actions">
+            <button type="button" class="button small" id="closeProposals">Cerrar</button>
+        </div>
+    </div>
+</div>
+
+<div class="modal-overlay" id="welcomeModal" aria-hidden="true">
+    <div class="modal-card welcome-modal">
+        <img src="{% static 'elecciones/img/modal.png' %}" alt="Bienvenida" class="welcome-modal-image">
+        <div class="modal-actions">
+            <button type="button" class="button small primary" id="closeWelcome">Continuar</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        // Modal de bienvenida
+        const welcomeModal = document.getElementById('welcomeModal');
+        const closeWelcome = document.getElementById('closeWelcome');
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('show_modal') === 'welcome') {
+            welcomeModal.classList.add('active');
+            welcomeModal.setAttribute('aria-hidden', 'false');
+        }
+
+        closeWelcome.addEventListener('click', function () {
+            welcomeModal.classList.remove('active');
+            welcomeModal.setAttribute('aria-hidden', 'true');
+            window.history.replaceState({}, document.title, window.location.pathname);
+        });
+
+        welcomeModal.addEventListener('click', function(event) {
+            if (event.target === welcomeModal) {
+                welcomeModal.classList.remove('active');
+                welcomeModal.setAttribute('aria-hidden', 'true');
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+
+        // Modal de confirmación de voto
+        const confirmModal = document.getElementById('confirmModal');
+        const modalMessage = document.getElementById('modalMessage');
+        const confirmVote = document.getElementById('confirmVote');
+        const cancelVote = document.getElementById('cancelVote');
+        let activeForm = null;
+
+        // Modal de propuestas
+        const proposalsModal = document.getElementById('proposalsModal');
+        const proposalsTitle = document.getElementById('proposalsTitle');
+        const proposalsContent = document.getElementById('proposalsContent');
+        const closeProposals = document.getElementById('closeProposals');
+
+        // Botones de ver propuestas
+        document.querySelectorAll('.proposals-button').forEach(function(button) {
+            button.addEventListener('click', function () {
+                const candidateName = button.getAttribute('data-candidate-name');
+                const imageUrl = button.getAttribute('data-image-url');
+                const proposalData = button.closest('.candidate-actions').querySelector('.proposal-data');
+                const proposals = proposalData ? proposalData.textContent : '';
+                proposalsTitle.textContent = `Propuestas de ${candidateName}`;
+                const proposalsList = proposals.split('\n').filter(p => p.trim());
+                const imageMarkup = imageUrl ? `<img src="${imageUrl}" alt="Foto de ${candidateName}" class="proposal-image">` : '';
+                proposalsContent.innerHTML = imageMarkup + proposalsList.map(p => `<p class="proposal-item">• ${p.trim()}</p>`).join('');
+                proposalsModal.classList.add('active');
+                proposalsModal.setAttribute('aria-hidden', 'false');
+            });
+        });
+
+        closeProposals.addEventListener('click', function () {
+            proposalsModal.classList.remove('active');
+            proposalsModal.setAttribute('aria-hidden', 'true');
+        });
+
+        proposalsModal.addEventListener('click', function(event) {
+            if (event.target === proposalsModal) {
+                proposalsModal.classList.remove('active');
+                proposalsModal.setAttribute('aria-hidden', 'true');
+            }
+        });
+
+        // Botones de votación
+        document.querySelectorAll('.vote-button').forEach(function(button) {
+            button.addEventListener('click', function () {
+                const candidateName = button.getAttribute('data-candidate-name');
+                activeForm = button.closest('form');
+                modalMessage.textContent = `¿Estás seguro de realizar tu voto por ${candidateName}?`;
+                confirmModal.classList.add('active');
+                confirmModal.setAttribute('aria-hidden', 'false');
+            });
+        });
+
+        cancelVote.addEventListener('click', function () {
+            confirmModal.classList.remove('active');
+            confirmModal.setAttribute('aria-hidden', 'true');
+            activeForm = null;
+        });
+
+        confirmVote.addEventListener('click', function () {
+            if (activeForm) {
+                activeForm.submit();
+            }
+        });
+
+        confirmModal.addEventListener('click', function(event) {
+            if (event.target === confirmModal) {
+                confirmModal.classList.remove('active');
+                confirmModal.setAttribute('aria-hidden', 'true');
+                activeForm = null;
+            }
+        });
+    });
+</script>
+{% endblock %}

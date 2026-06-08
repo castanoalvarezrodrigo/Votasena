@@ -1,0 +1,43 @@
+{% extends 'elecciones/base.html' %}
+
+{% block content %}
+<section class="card section-card admin-panel">
+    <div class="admin-header">
+        <div>
+            <h1>Gestión de votos</h1>
+            <p>Visualiza el historial de votos y exporta la información a Excel.</p>
+        </div>
+        <div class="admin-actions">
+            <a href="{% url 'admin_dashboard' %}" class="button small">Volver al panel</a>
+            <a href="{% url 'admin_votes_export' %}" class="button small primary">Exportar a Excel</a>
+        </div>
+    </div>
+
+    <div class="table-wrapper">
+        <table class="admin-table">
+            <thead>
+                <tr>
+                    <th>Aprendiz</th>
+                    <th>Candidato</th>
+                    <th>Rol</th>
+                    <th>Fecha</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for vote in votes %}
+                    <tr>
+                        <td>{{ vote.voter.user.username }}</td>
+                        <td>{{ vote.candidacy.name }}</td>
+                        <td>{{ vote.get_role_display }}</td>
+                        <td>{{ vote.created_at|date:'Y-m-d H:i' }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="4">No hay votos registrados.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</section>
+{% endblock %}
