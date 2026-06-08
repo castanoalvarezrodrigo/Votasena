@@ -6,6 +6,22 @@ Sistema de votación estudiantil desarrollado con Django para la elección de Re
 
 VotaSENA es una plataforma web diseñada para garantizar procesos electorales transparentes, organizados y accesibles para los aprendices desde la comodidad de sus celulares, computadoras o tablets. La aplicación permite gestionar candidaturas y registrar votos de manera segura, evitando duplicidades y asegurando que cada aprendiz participe únicamente en las elecciones que le corresponden.
 
+<img width="1913" height="903" alt="image" src="https://github.com/user-attachments/assets/a397dbb2-6148-4f01-8f36-22529f320f04" />
+
+<img width="1894" height="902" alt="image" src="https://github.com/user-attachments/assets/8b45eff3-9c3b-436a-ab72-50caca1cef29" />
+
+<img width="1898" height="904" alt="image" src="https://github.com/user-attachments/assets/b7dc2453-42e0-4f5f-9387-bacbebc1dbd6" />
+
+<img width="1897" height="898" alt="image" src="https://github.com/user-attachments/assets/6d444bd2-bf6d-4e66-8a95-86296532cdb6" />
+
+<img width="1894" height="907" alt="image" src="https://github.com/user-attachments/assets/f6379240-9cd9-4869-abc1-fea17f939557" />
+
+<img width="1894" height="904" alt="image" src="https://github.com/user-attachments/assets/1828428a-609e-4121-b3d4-0319f582b533" />
+
+<img width="1900" height="903" alt="image" src="https://github.com/user-attachments/assets/400f6fbe-e129-4729-8fa9-ca006e029e31" />
+
+<img width="373" height="810" alt="image" src="https://github.com/user-attachments/assets/7091d97a-c0fe-4eeb-a327-5b1902d57b06" />
+
 ## ✨ Características Principales
 
 ### 👨‍🎓 Gestión de Aprendices
